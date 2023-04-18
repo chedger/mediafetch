@@ -23,7 +23,10 @@ module.exports = async (req, res) => {
     searchTypeParams = `&customconfig=474bf85a-27fb-4ca2-b874-baefb5cdcbcc&SafeSearch=Off&videoLength=Short&videoLicense=All&count=${resultCount}`;
   } else {
     searchUrl = GOOGLE_IMAGE_SEARCH_URL;
-    searchTypeParams = `&cx=${GOOGLE_CSE_ID}&searchType=image&key=${GOOGLE_API_KEY}&num=${resultCount}`;
+    searchTypeParams = `&cx=${GOOGLE_CSE_ID}&key=${GOOGLE_API_KEY}&num=${resultCount}`;
+    if (searchType === "image") {
+      searchTypeParams += "&searchType=image";
+    }
   }
 
   console.log(`Request URL: ${searchUrl}?q=${encodeURIComponent(searchQuery)}${searchTypeParams}`);
@@ -58,3 +61,4 @@ module.exports = async (req, res) => {
   } else {
     res.status(404).json({ error: "No media found" });
   }
+};
