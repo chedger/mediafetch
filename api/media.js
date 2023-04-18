@@ -46,7 +46,7 @@ module.exports = async (req, res) => {
     const item = data.value[randomIndex];
     const mediaUrl = searchType === "video" ? item.contentUrl : item.link;
     console.log(`Original media URL: ${mediaUrl}`);
-    const mediaType = "image/jpeg"; // You may need to adjust this based on the actual image format.
+    const mediaType = searchType === "video" ? "video/mp4" : "image/jpeg"; 
 
     const mediaResponse = await fetch(mediaUrl);
     const contentType = mediaResponse.headers.get("content-type");
