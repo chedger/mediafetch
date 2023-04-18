@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Image Proxy</title>
+    <title>Bing Image and Video Proxy</title>
     <script>
         async function updateMediaSrc() {
             const searchQuery = new URLSearchParams(window.location.search).get("search");
@@ -11,7 +11,9 @@
                 return;
             }
 
-            const response = await fetch(`/api/image?search=${searchQuery}`);
+            const isVideoSearch = new URLSearchParams(window.location.search).get("type") === "video";
+
+            const response = await fetch(`/api/image?search=${searchQuery}&type=${isVideoSearch ? "video" : "image"}`);
             const contentType = response.headers.get("content-type");
             const mediaType = response.headers.get("x-media-type");
             const blob = await response.blob();
@@ -19,16 +21,16 @@
             const container = document.getElementById("media-container");
             container.innerHTML = "";
 
-            if (mediaType.startsWith("image")) {
-                const img = document.createElement("img");
-                img.src = URL.createObjectURL(blob);
-                img.alt = "Search Result";
-                container.appendChild(img);
-            } else if (mediaType.startsWith("video")) {
+            if (mediaType === "video/mp4") {
                 const video = document.createElement("video");
                 video.src = URL.createObjectURL(blob);
                 video.controls = true;
                 container.appendChild(video);
+            } else {
+                const img = document.createElement("img");
+                img.src = URL.createObjectURL(blob);
+                img.alt = "Search Result";
+                container.appendChild(img);
             }
         }
 
