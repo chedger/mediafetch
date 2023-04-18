@@ -15,12 +15,13 @@ module.exports = async (req, res) => {
 
   let searchUrl;
   let searchTypeParams;
+  const resultCount = 10;
   if (searchType === "video") {
     searchUrl = BING_VIDEO_SEARCH_URL;
-    searchTypeParams = "&customconfig=474bf85a-27fb-4ca2-b874-baefb5cdcbcc&mkt=en-US&SafeSearch=Off&videoLength=Short&videoLicense=All&count=1";
+    searchTypeParams = `&customconfig=474bf85a-27fb-4ca2-b874-baefb5cdcbcc&mkt=en-US&SafeSearch=Off&videoLength=Short&videoLicense=All&count=${resultCount}`;
   } else {
     searchUrl = BING_IMAGE_SEARCH_URL;
-    searchTypeParams = "&customconfig=474bf85a-27fb-4ca2-b874-baefb5cdcbcc&mkt=en-US&SafeSearch=Off&count=1";
+    searchTypeParams = `&customconfig=474bf85a-27fb-4ca2-b874-baefb5cdcbcc&mkt=en-US&SafeSearch=Off&count=${resultCount}`;
   }
 
   console.log(`Request URL: ${searchUrl}?q=${encodeURIComponent(searchQuery)}${searchTypeParams}`);
@@ -38,7 +39,8 @@ module.exports = async (req, res) => {
   console.log(`Response data:`, data);
 
   if (data.value && data.value.length > 0) {
-    const item = data.value[0];
+    const randomIndex = Math.floor(Math.random() * data.value.length);
+    const item = data.value[randomIndex];
     const mediaUrl = searchType === "video" ? item.contentUrl : item.thumbnailUrl;
     const mediaType = searchType === "video" ? "video/mp4" : item.encodingFormat;
 
