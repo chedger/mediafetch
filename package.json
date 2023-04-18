@@ -1,5 +1,5 @@
 {
-  "name": "google-image-proxy",
+  "name": "mediafetch",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -7,7 +7,7 @@
     "start": "vercel start"
   },
   "dependencies": {
-    "node-fetch": "^2.6.7"
+    "node-fetch": "^3.0.0"
   },
   "engines": {
     "node": "16.x"
