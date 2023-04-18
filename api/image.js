@@ -2,7 +2,7 @@ const fetch = require("node-fetch");
 
 const GOOGLE_API_KEY = "AIzaSyAUon6c2xVmcYvsSFkU064tq77QzuLmm64";
 const GOOGLE_CX = "166d93545867f4dbd";
-const GOOGLE_SEARCH_URL = `https://www.googleapis.com/customsearch/v1?key=${GOOGLE_API_KEY}&cx=${GOOGLE_CX}&searchType=video`;
+const GOOGLE_SEARCH_URL = `https://www.googleapis.com/customsearch/v1?key=${GOOGLE_API_KEY}&cx=${GOOGLE_CX}&searchType=image`;
 
 module.exports = async (req, res) => {
     const searchQuery = req.query.search;
@@ -12,7 +12,7 @@ module.exports = async (req, res) => {
         return;
     }
 
-    const response = await fetch(`${GOOGLE_SEARCH_URL}&q=${encodeURIComponent(searchQuery)}&fileType=mp4,webm`);
+    const response = await fetch(`${GOOGLE_SEARCH_URL}&q=${encodeURIComponent(searchQuery)}&fileType=jpg,jpeg,png,gif,mp4,webm`);
     const data = await response.json();
 
     if (data.items && data.items.length > 0) {
