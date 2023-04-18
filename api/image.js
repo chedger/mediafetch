@@ -12,7 +12,7 @@ module.exports = async (req, res) => {
         return;
     }
 
-    const response = await fetch(`${GOOGLE_SEARCH_URL}&q=${encodeURIComponent(searchQuery)}&fileType=jpg,jpeg,png,gif,mp4,webm`);
+    const response = await fetch(`${GOOGLE_SEARCH_URL}&q=${encodeURIComponent(searchQuery)}&fileType=mp4,webm`);
     const data = await response.json();
 
     if (data.items && data.items.length > 0) {
