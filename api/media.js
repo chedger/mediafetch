@@ -23,10 +23,7 @@ module.exports = async (req, res) => {
     searchTypeParams = `&customconfig=474bf85a-27fb-4ca2-b874-baefb5cdcbcc&SafeSearch=Off&videoLength=Short&videoLicense=All&count=${resultCount}`;
   } else {
     searchUrl = GOOGLE_IMAGE_SEARCH_URL;
-    searchTypeParams = `&cx=${GOOGLE_CSE_ID}&key=${GOOGLE_API_KEY}&num=${resultCount}`;
-    if (searchType === "image") {
-      searchTypeParams += "&searchType=image";
-    }
+    searchTypeParams = `&cx=${GOOGLE_CSE_ID}&searchType=image&key=${GOOGLE_API_KEY}&num=${resultCount}`;
   }
 
   console.log(`Request URL: ${searchUrl}?q=${encodeURIComponent(searchQuery)}${searchTypeParams}`);
@@ -49,7 +46,7 @@ module.exports = async (req, res) => {
     const item = data.value[randomIndex];
     const mediaUrl = searchType === "video" ? item.contentUrl : item.link;
     console.log(`Original media URL: ${mediaUrl}`);
-    const mediaType = searchType === "video" ? "video/mp4" : "image/jpeg"; 
+    const mediaType = "image/jpeg"; // You may need to adjust this based on the actual image format.
 
     const mediaResponse = await fetch(mediaUrl);
     const contentType = mediaResponse.headers.get("content-type");
