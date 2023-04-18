@@ -8,7 +8,7 @@ const GOOGLE_IMAGE_SEARCH_URL = `https://www.googleapis.com/customsearch/v1`;
 
 module.exports = async (req, res) => {
   const searchQuery = req.query.search;
-  const searchType = req.query.type === "video" ? "video" : "image";
+  const searchType = req.query.type && req.query.type === "video" ? "video" : "image";
 
   if (!searchQuery) {
     res.status(400).json({ error: "Search query is required" });
