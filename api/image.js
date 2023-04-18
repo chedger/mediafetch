@@ -1,8 +1,8 @@
 const fetch = require("node-fetch");
 
-const BING_API_KEY = "bb8a883e772b42e4920e7703330884dd";
-const BING_IMAGE_SEARCH_URL = `https://api.cognitive.microsoft.com/bing/v7.0/images/search`;
-const BING_VIDEO_SEARCH_URL = `https://api.cognitive.microsoft.com/bing/v7.0/videos/search`;
+const GOOGLE_API_KEY = "AIzaSyAUon6c2xVmcYvsSFkU064tq77QzuLmm64";
+const GOOGLE_CX = "166d93545867f4dbd";
+const GOOGLE_SEARCH_URL = `https://www.googleapis.com/customsearch/v1?key=${GOOGLE_API_KEY}&cx=${GOOGLE_CX}&searchType=image`;
 
 module.exports = async (req, res) => {
     const searchQuery = req.query.search;
@@ -12,23 +12,13 @@ module.exports = async (req, res) => {
         return;
     }
 
-    // Determine whether to search for images or videos based on the query string
-    const isVideoSearch = req.query.type === "video";
-
-    const searchUrl = isVideoSearch ? BING_VIDEO_SEARCH_URL : BING_IMAGE_SEARCH_URL;
-
-    const response = await fetch(`${searchUrl}?q=${encodeURIComponent(searchQuery)}&count=50`, {
-        headers: {
-            "Ocp-Apim-Subscription-Key": BING_API_KEY,
-        },
-    });
+    const response = await fetch(`${GOOGLE_SEARCH_URL}&q=${encodeURIComponent(searchQuery)}&fileType=jpg,jpeg,png,gif,mp4,webm`);
     const data = await response.json();
 
-    if (data.value && data.value.length > 0) {
-        const randomIndex = Math.floor(Math.random() * data.value.length);
-        const item = data.value[randomIndex];
-        const mediaUrl = isVideoSearch ? item.contentUrl : item.thumbnailUrl;
-        const mediaType = isVideoSearch ? "video/mp4" : item.encodingFormat;
+    if (data.items && data.items.length > 0) {
+        const randomIndex = Math.floor(Math.random() * data.items.length);
+        const mediaUrl = data.items[randomIndex].link;
+        const mediaType = data.items[randomIndex].mime;
 
         const mediaResponse = await fetch(mediaUrl);
         const contentType = mediaResponse.headers.get("content-type");
