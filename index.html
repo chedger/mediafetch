@@ -12,19 +12,21 @@
             }
 
             const response = await fetch(`/api/image?search=${searchQuery}`);
-            const data = await response.json();
+            const contentType = response.headers.get("content-type");
+            const mediaType = response.headers.get("x-media-type");
+            const blob = await response.blob();
 
             const container = document.getElementById("media-container");
             container.innerHTML = "";
 
-            if (data.mediaType === "image") {
+            if (mediaType.startsWith("image")) {
                 const img = document.createElement("img");
-                img.src = data.mediaUrl;
+                img.src = URL.createObjectURL(blob);
                 img.alt = "Search Result";
                 container.appendChild(img);
-            } else if (data.mediaType === "video") {
+            } else if (mediaType.startsWith("video")) {
                 const video = document.createElement("video");
-                video.src = data.mediaUrl;
+                video.src = URL.createObjectURL(blob);
                 video.controls = true;
                 container.appendChild(video);
             }
