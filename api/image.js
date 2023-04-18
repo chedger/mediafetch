@@ -17,8 +17,10 @@ module.exports = async (req, res) => {
 
     if (data.items && data.items.length > 0) {
         const randomIndex = Math.floor(Math.random() * data.items.length);
-        res.json({ imageUrl: data.items[randomIndex].link });
+        const item = data.items[randomIndex];
+        const mediaType = item.mime.startsWith('video') ? 'video' : 'image';
+        res.json({ mediaUrl: item.link, mediaType });
     } else {
-        res.status(404).json({ error: "No images found" });
+        res.status(404).json({ error: "No media found" });
     }
 };
