@@ -13,7 +13,7 @@
 
             const isVideoSearch = new URLSearchParams(window.location.search).get("type") === "video";
 
-            const response = await fetch(`/api/image?search=${searchQuery}&type=${isVideoSearch ? "video" : "image"}`);
+            const response = await fetch(`/api/media?search=${searchQuery}&type=${isVideoSearch ? "video" : "image"}`);
             const contentType = response.headers.get("content-type");
             const mediaType = response.headers.get("x-media-type");
             const blob = await response.blob();
