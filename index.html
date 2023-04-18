@@ -5,18 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Google Image Proxy</title>
     <script>
-        function updateImageSrc() {
+        async function updateImageSrc() {
             const searchQuery = new URLSearchParams(window.location.search).get("search");
             if (!searchQuery) {
                 document.getElementById("image").src = "";
                 return;
             }
 
-            fetch(`/api/image?search=${searchQuery}`)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById("image").src = data.imageUrl;
-                });
+            const response = await fetch(`/api/image?search=${searchQuery}`);
+            const data = await response.json();
+            document.getElementById("image").src = data.imageUrl;
         }
 
         window.addEventListener("load", updateImageSrc);
