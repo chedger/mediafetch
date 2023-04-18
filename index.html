@@ -1,48 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title>Media Fetch Example</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Image Proxy</title>
+    <script>
+        async function updateMediaSrc() {
+            const searchQuery = new URLSearchParams(window.location.search).get("search");
+            if (!searchQuery) {
+                return;
+            }
+
+            const response = await fetch(`/api/image?search=${searchQuery}`);
+            const contentType = response.headers.get("content-type");
+            const mediaType = response.headers.get("x-media-type");
+            const blob = await response.blob();
+
+            const container = document.getElementById("media-container");
+            container.innerHTML = "";
+
+            if (mediaType.startsWith("image")) {
+                const img = document.createElement("img");
+                img.src = URL.createObjectURL(blob);
+                img.alt = "Search Result";
+                container.appendChild(img);
+            } else if (mediaType.startsWith("video")) {
+                const video = document.createElement("video");
+                video.src = URL.createObjectURL(blob);
+                video.controls = true;
+                container.appendChild(video);
+            }
+        }
+
+        window.addEventListener("load", updateMediaSrc);
+    </script>
 </head>
 <body>
-	<h1>Media Fetch Example</h1>
-	<p>Enter a search query below to fetch a random media file:</p>
-	<form id="search-form">
-		<label for="search-query">Search query:</label>
-		<input type="text" id="search-query" name="search" required>
-		<select id="search-type" name="type">
-			<option value="image" selected>Image</option>
-			<option value="video">Video</option>
-		</select>
-		<button type="submit">Search</button>
-	</form>
-	<div id="media-container"></div>
-
-	<script>
-  const form = document.querySelector("#search-form");
-  const mediaContainer = document.querySelector("#media-container");
-
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const searchQuery = encodeURIComponent(form.search.value.trim());
-    const searchType = form.type.value;
-    const mediaUrl = `/api/image?search=${searchQuery}&type=${searchType}`;
-    const response = await fetch(mediaUrl);
-    const contentType = response.headers.get("content-type");
-    if (searchType === "image") {
-      const img = document.createElement("img");
-      img.src = URL.createObjectURL(await response.blob());
-      mediaContainer.innerHTML = "";
-      mediaContainer.appendChild(img);
-    } else if (searchType === "video") {
-      const data = await response.json();
-      const videoUrl = data.mediaUrl;
-      const video = document.createElement("video");
-      video.src = videoUrl;
-      video.controls = true;
-      mediaContainer.innerHTML = "";
-      mediaContainer.appendChild(video);
-    }
-  });
-</script>
+    <div id="media-container"></div>
 </body>
 </html>
