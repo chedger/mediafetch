@@ -40,7 +40,8 @@ module.exports = async (req, res) => {
   const data = await response.json();
   console.log(`Response data:`, data);
 
-  if (data.value && data.value.length > 0) {
+  const results = searchType === "video" ? data.value : data.items;
+  if (results && results.length > 0) {
     const randomIndex = Math.floor(Math.random() * data.value.length);
     const item = data.value[randomIndex];
     const mediaUrl = searchType === "video" ? item.contentUrl : item.link;
