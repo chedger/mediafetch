@@ -15,7 +15,7 @@ module.exports = async (req, res) => {
 
   let searchUrl;
   let searchTypeParams;
-  const resultCount = 10;
+  const resultCount = 20;
   if (searchType === "video") {
     searchUrl = BING_VIDEO_SEARCH_URL;
     searchTypeParams = `&customconfig=474bf85a-27fb-4ca2-b874-baefb5cdcbcc&mkt=en-US&SafeSearch=Off&videoLength=Short&videoLicense=All&count=${resultCount}`;
