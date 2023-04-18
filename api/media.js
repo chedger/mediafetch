@@ -1,6 +1,6 @@
 const fetch = require("node-fetch");
 
-const BING_API_KEY = "bb8a883e772b42e4920e7703330884dd";
+const BING_API_KEY = process.env.BING_API_KEY;
 const BING_IMAGE_SEARCH_URL = `https://api.cognitive.microsoft.com/bing/v7.0/images/search`;
 const BING_VIDEO_SEARCH_URL = `https://api.cognitive.microsoft.com/bing/v7.0/videos/search`;
 
