@@ -58,4 +58,3 @@ module.exports = async (req, res) => {
   } else {
     res.status(404).json({ error: "No media found" });
   }
-};
