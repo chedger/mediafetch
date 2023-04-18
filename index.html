@@ -25,7 +25,7 @@
     event.preventDefault();
     const searchQuery = encodeURIComponent(form.search.value.trim());
     const searchType = form.type.value;
-    const mediaUrl = `/api/media?search=${searchQuery}&type=${searchType}`;
+    const mediaUrl = `/api/image?search=${searchQuery}&type=${searchType}`;
     const response = await fetch(mediaUrl);
     const contentType = response.headers.get("content-type");
     if (searchType === "image") {
