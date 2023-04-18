@@ -1,8 +1,8 @@
 const fetch = require("node-fetch");
 
 const BING_API_KEY = process.env.BING_API_KEY;
-const BING_IMAGE_SEARCH_URL = `https://api.bing.microsoft.com//bingcustomsearch/v7.0/images/search`;
-const BING_VIDEO_SEARCH_URL = `https://api.bing.microsoft.com//bingcustomsearch/v7.0/videos/search`;
+const BING_IMAGE_SEARCH_URL = `https://api.bing.microsoft.com/v7.0/custom/images/search`;
+const BING_VIDEO_SEARCH_URL = `https://api.bing.microsoft.com/v7.0/custom/videos/search`;
 
 module.exports = async (req, res) => {
   const searchQuery = req.query.search;
