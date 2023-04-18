@@ -17,10 +17,10 @@ module.exports = async (req, res) => {
   let searchTypeParams;
   if (searchType === "video") {
     searchUrl = BING_VIDEO_SEARCH_URL;
-    searchTypeParams = "&SafeSearch=Off&videoLength=Short&videoLicense=All&count=1";
+    searchTypeParams = "&customconfig=474bf85a-27fb-4ca2-b874-baefb5cdcbcc&mkt=en-US&SafeSearch=Off&videoLength=Short&videoLicense=All&count=1";
   } else {
     searchUrl = BING_IMAGE_SEARCH_URL;
-    searchTypeParams = "&SafeSearch=Off&count=1";
+    searchTypeParams = "&customconfig=474bf85a-27fb-4ca2-b874-baefb5cdcbcc&mkt=en-US&SafeSearch=Off&count=1";
   }
 
   console.log(`Request URL: ${searchUrl}?q=${encodeURIComponent(searchQuery)}${searchTypeParams}`);
