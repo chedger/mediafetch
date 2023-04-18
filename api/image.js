@@ -12,15 +12,20 @@ module.exports = async (req, res) => {
         return;
     }
 
-    const response = await fetch(`${GOOGLE_SEARCH_URL}&q=${encodeURIComponent(searchQuery)}&fileType=jpg,jpeg,png,gif,mp4,webm`);
+    const response = await fetch(`${GOOGLE_SEARCH_URL}&q=${encodeURIComponent(searchQuery)}&fileType=jpg,jpeg,png,gif`);
     const data = await response.json();
 
     if (data.items && data.items.length > 0) {
         const randomIndex = Math.floor(Math.random() * data.items.length);
-        const item = data.items[randomIndex];
-        const mediaType = item.mime.startsWith('video') ? 'video' : 'image';
-        res.json({ mediaUrl: item.link, mediaType });
+        const imageUrl = data.items[randomIndex].link;
+
+        const imageResponse = await fetch(imageUrl);
+        const contentType = imageResponse.headers.get("content-type");
+        const imageData = await imageResponse.buffer();
+
+        res.setHeader("Content-Type", contentType);
+        res.send(imageData);
     } else {
-        res.status(404).json({ error: "No media found" });
+        res.status(404).json({ error: "No images found" });
     }
 };
