@@ -42,6 +42,7 @@ module.exports = async (req, res) => {
     const randomIndex = Math.floor(Math.random() * data.value.length);
     const item = data.value[randomIndex];
     const mediaUrl = searchType === "video" ? item.contentUrl : item.thumbnailUrl;
+    console.log(`Original media URL: ${mediaUrl}`);
     const mediaType = searchType === "video" ? "video/mp4" : item.encodingFormat;
 
     const mediaResponse = await fetch(mediaUrl);
