@@ -3,13 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Image Search</title>
+    <title>Google Image Proxy</title>
+    <script>
+        function updateImageSrc() {
+            const searchQuery = new URLSearchParams(window.location.search).get("search");
+            if (!searchQuery) {
+                document.getElementById("image").src = "";
+                return;
+            }
+
+            fetch(`/api/image?search=${searchQuery}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("image").src = data.imageUrl;
+                });
+        }
+
+        window.addEventListener("load", updateImageSrc);
+    </script>
 </head>
 <body>
-    <input id="searchInput" type="text" placeholder="Search for an image" />
-    <button id="searchButton">Search</button>
-    <img id="dynamicImage" alt="Dynamic Image" style="max-width: 100%;" />
-
-    <script src="script.js"></script>
+    <img id="image" src="" alt="Search Result">
 </body>
 </html>
