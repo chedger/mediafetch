@@ -18,29 +18,31 @@
 	<div id="media-container"></div>
 
 	<script>
-		const form = document.querySelector("#search-form");
-		const mediaContainer = document.querySelector("#media-container");
+  const form = document.querySelector("#search-form");
+  const mediaContainer = document.querySelector("#media-container");
 
-		form.addEventListener("submit", async (event) => {
-			event.preventDefault();
-			const searchQuery = encodeURIComponent(form.search.value.trim());
-			const searchType = form.type.value;
-			const mediaUrl = `/api/media?search=${searchQuery}&type=${searchType}`;
-			const response = await fetch(mediaUrl);
-			const contentType = response.headers.get("content-type");
-			if (searchType === "image") {
-				const img = document.createElement("img");
-				img.src = URL.createObjectURL(await response.blob());
-				mediaContainer.innerHTML = "";
-				mediaContainer.appendChild(img);
-			} else if (searchType === "video") {
-				const video = document.createElement("video");
-				video.src = URL.createObjectURL(await response.blob());
-				video.controls = true;
-				mediaContainer.innerHTML = "";
-				mediaContainer.appendChild(video);
-			}
-		});
-	</script>
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const searchQuery = encodeURIComponent(form.search.value.trim());
+    const searchType = form.type.value;
+    const mediaUrl = `/api/media?search=${searchQuery}&type=${searchType}`;
+    const response = await fetch(mediaUrl);
+    const contentType = response.headers.get("content-type");
+    if (searchType === "image") {
+      const img = document.createElement("img");
+      img.src = URL.createObjectURL(await response.blob());
+      mediaContainer.innerHTML = "";
+      mediaContainer.appendChild(img);
+    } else if (searchType === "video") {
+      const data = await response.json();
+      const videoUrl = data.mediaUrl;
+      const video = document.createElement("video");
+      video.src = videoUrl;
+      video.controls = true;
+      mediaContainer.innerHTML = "";
+      mediaContainer.appendChild(video);
+    }
+  });
+</script>
 </body>
 </html>
