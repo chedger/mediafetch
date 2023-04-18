@@ -1,8 +1,11 @@
 const fetch = require("node-fetch");
 
 const BING_API_KEY = process.env.BING_API_KEY;
-const BING_IMAGE_SEARCH_URL = `https://api.bing.microsoft.com/v7.0/custom/images/search`;
+const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+const GOOGLE_CSE_ID = process.env.GOOGLE_CSE_ID;
+
 const BING_VIDEO_SEARCH_URL = `https://api.bing.microsoft.com/v7.0/custom/videos/search`;
+const GOOGLE_IMAGE_SEARCH_URL = `https://www.googleapis.com/customsearch/v1`;
 
 module.exports = async (req, res) => {
   const searchQuery = req.query.search;
@@ -20,30 +23,33 @@ module.exports = async (req, res) => {
     searchUrl = BING_VIDEO_SEARCH_URL;
     searchTypeParams = `&customconfig=474bf85a-27fb-4ca2-b874-baefb5cdcbcc&SafeSearch=Off&videoLength=Short&videoLicense=All&count=${resultCount}`;
   } else {
-    searchUrl = BING_IMAGE_SEARCH_URL;
-    searchTypeParams = `&customconfig=474bf85a-27fb-4ca2-b874-baefb5cdcbcc&SafeSearch=Off&count=${resultCount}`;
+    searchUrl = GOOGLE_IMAGE_SEARCH_URL;
+    searchTypeParams = `&cx=${GOOGLE_CSE_ID}&searchType=image&num=${resultCount}&key=${GOOGLE_API_KEY}`;
   }
 
   console.log(`Request URL: ${searchUrl}?q=${encodeURIComponent(searchQuery)}${searchTypeParams}`);
   const response = await fetch(
     `${searchUrl}?q=${encodeURIComponent(searchQuery)}${searchTypeParams}`,
     {
-      headers: {
-        "Ocp-Apim-Subscription-Key": BING_API_KEY,
-        "X-MSEdge-ClientID": "mediafetch",
-        "X-MSEdge-ClientIP": "0.0.0.0",
-      },
+      headers: searchType === "video"
+        ? {
+            "Ocp-Apim-Subscription-Key": BING_API_KEY,
+            "X-MSEdge-ClientID": "mediafetch",
+            "X-MSEdge-ClientIP": "0.0.0.0",
+          }
+        : {}
     }
   );
   const data = await response.json();
   console.log(`Response data:`, data);
 
-  if (data.value && data.value.length > 0) {
-    const randomIndex = Math.floor(Math.random() * data.value.length);
-    const item = data.value[randomIndex];
-    const mediaUrl = searchType === "video" ? item.contentUrl : item.thumbnailUrl;
+  if ((searchType === "video" && data.value && data.value.length > 0) || (searchType === "image" && data.items && data.items.length > 0)) {
+    const items = searchType === "video" ? data.value : data.items;
+    const randomIndex = Math.floor(Math.random() * items.length);
+    const item = items[randomIndex];
+    const mediaUrl = searchType === "video" ? item.contentUrl : item.link;
     console.log(`Original media URL: ${mediaUrl}`);
-    const mediaType = searchType === "video" ? "video/mp4" : item.encodingFormat;
+    const mediaType = searchType === "video" ? "video/mp4" : "image/jpeg"; // You may need to adjust this based on the actual image format.
 
     if (searchType === "video") {
       res.setHeader("X-Media-Type", mediaType);
