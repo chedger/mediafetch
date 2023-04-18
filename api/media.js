@@ -45,13 +45,18 @@ module.exports = async (req, res) => {
     console.log(`Original media URL: ${mediaUrl}`);
     const mediaType = searchType === "video" ? "video/mp4" : item.encodingFormat;
 
-    const mediaResponse = await fetch(mediaUrl);
-    const contentType = mediaResponse.headers.get("content-type");
-    const mediaData = await mediaResponse.buffer();
+    if (searchType === "video") {
+      res.setHeader("X-Media-Type", mediaType);
+      res.json({ mediaUrl });
+    } else {
+      const mediaResponse = await fetch(mediaUrl);
+      const contentType = mediaResponse.headers.get("content-type");
+      const mediaData = await mediaResponse.buffer();
 
-    res.setHeader("Content-Type", contentType);
-    res.setHeader("X-Media-Type", mediaType);
-    res.send(mediaData);
+      res.setHeader("Content-Type", contentType);
+      res.setHeader("X-Media-Type", mediaType);
+      res.send(mediaData);
+    }
   } else {
     res.status(404).json({ error: "No media found" });
   }
