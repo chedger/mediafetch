@@ -16,7 +16,8 @@ module.exports = async (req, res) => {
     const data = await response.json();
 
     if (data.items && data.items.length > 0) {
-        res.json({ imageUrl: data.items[0].link });
+        const randomIndex = Math.floor(Math.random() * data.items.length);
+        res.json({ imageUrl: data.items[randomIndex].link });
     } else {
         res.status(404).json({ error: "No images found" });
     }
