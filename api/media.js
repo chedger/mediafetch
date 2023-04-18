@@ -20,7 +20,7 @@ module.exports = async (req, res) => {
     searchUrl = BING_IMAGE_SEARCH_URL;
   }
 
-  console.log(`Request URL: ${searchUrl}?q=${encodeURIComponent(searchQuery)}&count=50`);
+  console.log(`Request URL: ${searchUrl}?q=${encodeURIComponent(searchQuery)}&count=1`);
   const response = await fetch(
     `${searchUrl}?q=${encodeURIComponent(searchQuery)}&count=50`,
     {
