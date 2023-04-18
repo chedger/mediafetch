@@ -5,22 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Google Image Proxy</title>
     <script>
-        async function updateImageSrc() {
+        async function updateMediaSrc() {
             const searchQuery = new URLSearchParams(window.location.search).get("search");
             if (!searchQuery) {
-                document.getElementById("image").src = "";
                 return;
             }
 
             const response = await fetch(`/api/image?search=${searchQuery}`);
             const data = await response.json();
-            document.getElementById("image").src = data.imageUrl;
+
+            const container = document.getElementById("media-container");
+            container.innerHTML = "";
+
+            if (data.mediaType === "image") {
+                const img = document.createElement("img");
+                img.src = data.mediaUrl;
+                img.alt = "Search Result";
+                container.appendChild(img);
+            } else if (data.mediaType === "video") {
+                const video = document.createElement("video");
+                video.src = data.mediaUrl;
+                video.controls = true;
+                container.appendChild(video);
+            }
         }
 
-        window.addEventListener("load", updateImageSrc);
+        window.addEventListener("load", updateMediaSrc);
     </script>
 </head>
 <body>
-    <img id="image" src="" alt="Search Result">
+    <div id="media-container"></div>
 </body>
 </html>
