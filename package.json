@@ -1,5 +1,5 @@
 {
-  "name": "mediafetch",
+  "name": "bing-image-video-proxy",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -7,7 +7,7 @@
     "start": "vercel start"
   },
   "dependencies": {
-    "node-fetch": "^3.0.0"
+    "node-fetch": "^2.6.7"
   },
   "engines": {
     "node": "16.x"
