@@ -26,7 +26,7 @@ module.exports = async (req, res) => {
     }
 
     if (data.items && data.items.length > 0) {
-        const randomIndex = Math.floor(Math.random() * data.items.length);
+        const randomIndex = 1//Math.floor(Math.random() * data.items.length);
         const mediaUrl = data.items[randomIndex].link;
         const mediaType = data.items[randomIndex].mime;
 
