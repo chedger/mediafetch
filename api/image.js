@@ -15,10 +15,12 @@ module.exports = async (req, res) => {
     const response = await fetch(`${GOOGLE_SEARCH_URL}&q=${encodeURIComponent(searchQuery)}&fileType=jpg,jpeg,png,gif,mp4,webm`);
     const data = await response.json();
 
-    if (data.items && data.items.length = 1) {
+    if (data.items && data.items.length > 0) {
         const randomIndex = Math.floor(Math.random() * data.items.length);
-        const mediaUrl = data.items[randomIndex].link;
-        const mediaType = data.items[randomIndex].mime;
+        //const mediaUrl = data.items[randomIndex].link;
+        //const mediaType = data.items[randomIndex].mime;
+        const mediaUrl = data.items[1].link;
+        const mediaType = data.items[1].mime;
 
         const mediaResponse = await fetch(mediaUrl);
         const contentType = mediaResponse.headers.get("content-type");
