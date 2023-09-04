@@ -6,6 +6,7 @@ const GOOGLE_SEARCH_URL = `https://www.googleapis.com/customsearch/v1?key=${GOOG
 
 module.exports = async (req, res) => {
     const searchQuery = req.query.search;
+    let searchIndex = req.query.index;
 
     if (!searchQuery) {
         res.status(400).json({ error: "Search query is required" });
@@ -25,10 +26,14 @@ module.exports = async (req, res) => {
         }
     }
 
+    if(data.items.length < req.query.index || req.query.index.length  =  0) {
+        searchIndex = Math.floor(Math.random() * data.items.length);
+    }
+
     if (data.items && data.items.length > 0) {
-        const randomIndex = 1//Math.floor(Math.random() * data.items.length);
-        const mediaUrl = data.items[randomIndex].link;
-        const mediaType = data.items[randomIndex].mime;
+        //const randomIndex = 1//Math.floor(Math.random() * data.items.length);
+        const mediaUrl = data.items[searchIndex].link;
+        const mediaType = data.items[searchIndex].mime;
 
         const mediaResponse = await fetch(mediaUrl);
         const contentType = mediaResponse.headers.get("content-type");
