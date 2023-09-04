@@ -16,13 +16,15 @@ module.exports = async (req, res) => {
     const data = await response.json();
 
     if (data.items && data.items.length > 0) {
-        const randomIndex = Math.floor(Math.random() * data.items.length);
-        //const mediaUrl = data.items[randomIndex].link;
-        //const mediaType = data.items[randomIndex].mime;
-        const mediaUrl = data.items[1].link;
-        const mediaType = data.items[1].mime;
+        let mediaResponse;
+        let randomIndex=1;
+        do {
+            //randomIndex = Math.floor(Math.random() * data.items.length);
+            const mediaUrl = data.items[randomIndex].link;
+            mediaResponse = await fetch(mediaUrl);
+        } while(!mediaResponse.ok)
 
-        const mediaResponse = await fetch(mediaUrl);
+        const mediaType = data.items[randomIndex].mime;
         const contentType = mediaResponse.headers.get("content-type");
         const mediaData = await mediaResponse.buffer();
 
