@@ -2,7 +2,7 @@ oconst fetch = require("node-fetch");
 
 const GOOGLE_API_KEY = "AIzaSyAUon6c2xVmcYvsSFkU064tq77QzuLmm64";
 const GOOGLE_CX = "166d93545867f4dbd";
-const GOOGLE_SEARCH_URL = `https://www.googleapis.com/customsearch/v1?key=${GOOGLE_API_KEY}&cx=${GOOGLE_CX}&searchType=video`;
+const GOOGLE_SEARCH_URL = `https://www.googleapis.com/customsearch/v1?key=${GOOGLE_API_KEY}&cx=${GOOGLE_CX}&searchType=image`;
 
 module.exports = async (req, res) => {
     const searchQuery = req.query.search;
