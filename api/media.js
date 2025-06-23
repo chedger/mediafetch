@@ -12,13 +12,29 @@ module.exports = async (req, res) => {
         return;
     }
 
-    const response = await fetch(`${GOOGLE_SEARCH_URL}&q=${encodeURIComponent(searchQuery)}&fileType=jpg,jpeg,png,gif,mp4,webm`);
+    const start = Math.floor(Math.random() * 50) + 1; // randomize result page
+    const response = await fetch(`${GOOGLE_SEARCH_URL}&q=${encodeURIComponent(searchQuery)}&fileType=jpg,jpeg,png,gif,mp4,webm&start=${start}`);
     const data = await response.json();
 
     if (data.items && data.items.length > 0) {
         const randomIndex = Math.floor(Math.random() * data.items.length);
-        const mediaUrl = data.items[randomIndex].link;
+        let mediaUrl = data.items[randomIndex].link;
         const mediaType = data.items[randomIndex].mime;
+
+        // handle facebook/instagram pages that require login
+        try {
+            const urlHost = new URL(mediaUrl).hostname;
+            if (urlHost.includes('instagram.') || urlHost.includes('facebook.')) {
+                const pageRes = await fetch(mediaUrl);
+                const pageHtml = await pageRes.text();
+                const ogMatch = pageHtml.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i);
+                if (ogMatch && ogMatch[1]) {
+                    mediaUrl = ogMatch[1];
+                }
+            }
+        } catch (e) {
+            // ignore and fallback to original link
+        }
 
         const mediaResponse = await fetch(mediaUrl);
         const contentType = mediaResponse.headers.get("content-type");
