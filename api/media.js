@@ -12,7 +12,7 @@ module.exports = async (req, res) => {
         return;
     }
 
-    const start = Math.floor(Math.random() * 50) + 1; // randomize result page
+    const start = Math.floor(Math.random() * 5) + 1; // randomize result page
     const response = await fetch(`${GOOGLE_SEARCH_URL}&q=${encodeURIComponent(searchQuery)}&fileType=jpg,jpeg,png,gif,mp4,webm&start=${start}`);
     const data = await response.json();
 
